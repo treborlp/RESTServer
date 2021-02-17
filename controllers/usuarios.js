@@ -7,8 +7,11 @@ getUsuarios = (req, res = response) => {
 }
 
 postUsuarios = (req, res = response) => {
+    const { nombre, dni } = req.body
     res.json({
-        "mensaje": "ok postUsuarios"
+        "mensaje": "ok postUsuarios",
+        nombre,
+        dni
     })
 }
 

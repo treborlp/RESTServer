@@ -18,6 +18,8 @@ class Server {
     middlewares() {
         //Middlewar cors
         this.app.use(cors());
+        //Middlewar de JSON
+        this.app.use(express.json());
         //Middlewar carpeta public
         this.app.use(express.static('public'));
     }
