@@ -24,32 +24,8 @@ class Server {
 
 
     routes() {
-        //Inicalizamos las rutas
-        this.app.get('/api', (req, res) => {
-            res.json({
-                "mensaje": "ok"
-            })
-        })
-        this.app.put('/api', (req, res) => {
-            res.json({
-                "mensaje": "ok"
-            })
-        })
-        this.app.post('/api', (req, res) => {
-            res.json({
-                "mensaje": "ok"
-            })
-        })
-        this.app.delete('/api', (req, res) => {
-            res.json({
-                "mensaje": "ok"
-            })
-        })
-        this.app.patch('/api', (req, res) => {
-            res.json({
-                "mensaje": "ok"
-            })
-        })
+        //Importamos las rutas
+        this.app.use('/api/usuarios', require("../routes/usuarios"));
     }
 
     listen() {
