@@ -4,7 +4,7 @@ const routes = Router();
 
 routes.get('/', getUsuarios)
 routes.post('/', postUsuarios)
-routes.put('/', putUsuarios)
+routes.put('/:id', putUsuarios)
 routes.delete('/', deleteUsuarios)
 routes.patch('/', patchUsuarios)
 
