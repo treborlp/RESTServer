@@ -28,7 +28,7 @@ const UsuarioSchema = Schema({
         required: [true, 'El nombre es obligatorio']
     },
     estado: {
-        type: String,
+        type: Boolean,
         default: true
     },
     google: {

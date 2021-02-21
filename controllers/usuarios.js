@@ -1,4 +1,5 @@
 const { response } = require('express')
+const Usuario = require('../models/usuario');
 
 getUsuarios = (req, res = response) => {
     //Request tipo 
@@ -13,12 +14,15 @@ getUsuarios = (req, res = response) => {
     })
 }
 
-postUsuarios = (req, res = response) => {
-    const { nombre, dni } = req.body
+postUsuarios = async(req, res = response) => {
+    //const { nombre, dni } = req.body
+    const body = req.body
+    const usuario = new Usuario(body);
+
+    await usuario.save();
+
     res.json({
-        "mensaje": "ok postUsuarios",
-        nombre,
-        dni
+        usuario
     })
 }
 
