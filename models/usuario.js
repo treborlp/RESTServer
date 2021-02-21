@@ -33,6 +33,7 @@ const UsuarioSchema = Schema({
     },
     google: {
         type: Boolean,
+        default: false,
         required: false
     }
 });
