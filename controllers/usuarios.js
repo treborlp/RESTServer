@@ -18,10 +18,7 @@ getUsuarios = (req, res = response) => {
 
 postUsuarios = async(req, res = response) => {
 
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json(errors)
-    }
+
     //const { nombre, dni } = req.body
     //const body = req.body 
     const { nombre, correo, password, rol } = req.body
