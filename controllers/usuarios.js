@@ -40,8 +40,7 @@ postUsuarios = async(req, res = response) => {
     await usuario.save();
 
     res.json({
-        nombre,
-        correo
+        usuario
     })
 }
 

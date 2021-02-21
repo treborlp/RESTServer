@@ -38,4 +38,10 @@ const UsuarioSchema = Schema({
     }
 });
 
+//Este metodo quita el usuario y la version (__v) de la respuesta
+UsuarioSchema.methods.toJSON = function() {
+    const { __v, password, ...usuario } = this.toObject();
+    return usuario
+}
+
 module.exports = model('Usuario', UsuarioSchema)
