@@ -6,14 +6,31 @@ getUsuarios = async(req, res = response) => {
     //Request tipo 
     //http://localhost:8080/api/usuarios?apiKey=6468496456455664645654&id=4521&page=10
     //const { id, apiKey, page } = req.query;
-
+    const query = { estado: true }; // Query para listar solo los usuarios habilitados
     const { limite = 5, desde = 0 } = req.query;
-    const usuarios = await Usuario.find()
+
+    /*  //Consulta en la base
+      const usuarios = await Usuario.find(query)
+          .skip(Number(desde))
+          .limit(Number(limite));
+
+      //Contar registros
+      const total = await Usuario.countDocuments(query);*/
+
+    //Consulta dos promesas de manera simultanea (Resulta mas eficiente que el metodo anterior)
+    const [usuarios, total] = await Promise.all([
+        Usuario.find(query)
         .skip(Number(desde))
-        .limit(Number(limite));
+        .limit(Number(limite)), //Promera promesa 
+        Usuario.countDocuments(query) //Segunda promesa
+    ])
 
-
-    res.json(usuarios)
+    //Contara el numero total de resultados
+    //const total = usuarios.length
+    res.json({
+        total,
+        usuarios
+    })
 }
 
 postUsuarios = async(req, res = response) => {
