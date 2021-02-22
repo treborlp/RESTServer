@@ -16,8 +16,6 @@ getUsuarios = (req, res = response) => {
 }
 
 postUsuarios = async(req, res = response) => {
-
-
     //const { nombre, dni } = req.body
     //const body = req.body 
     const { nombre, correo, password, rol } = req.body
@@ -35,15 +33,20 @@ postUsuarios = async(req, res = response) => {
     })
 }
 
-putUsuarios = (req, res = response) => {
+putUsuarios = async(req, res = response) => {
     //Request tipo
     //http://localhost:8080/api/usuarios/10
-    const { id } = req.params;
+    const { id } = req.params; //Extraemos el id del params
+    const { google, correo, password, ...resto } = req.body //Extraemos 
 
-    res.json({
-        "mensaje": "ok putUsuarios",
-        id
-    })
+    if (password) {
+        //Encriptamos contrasenna
+        const salt = bcryptjs.genSaltSync(10); //asignamos el numero de iteraciones
+        resto.password = bcryptjs.hashSync(password, salt); //creamos un hash direccional para el valor del password
+    }
+    const usuario = await Usuario.findByIdAndUpdate(id, resto);
+
+    res.json(resto)
 }
 
 deleteUsuarios = (req, res = response) => {
