@@ -18,10 +18,19 @@ const validarCorreo = async(correo) => {
     }
 }
 
+const validarExisteID = async(id) => {
+
+    const usuarioExiste = await UsuarioSchema.findById(id); //Consultamos a la base de datos si el correo ya existe
+    if (!usuarioExiste) {
+        throw new Error(`El usuario no existe en la base de datos`)
+    }
+}
+
 
 
 
 module.exports = {
     validarRol,
-    validarCorreo
+    validarCorreo,
+    validarExisteID
 }

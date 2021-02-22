@@ -11,7 +11,8 @@ const {
 
 const {
     validarRol,
-    validarCorreo
+    validarCorreo,
+    validarExisteID
 } = require('../helpers/db-validator');
 const { validarCampos } = require('../middleware/validar-campo');
 
@@ -27,7 +28,12 @@ routes.post('/', [
     check('rol').custom(validarRol), // Se obvia la forma (rol)=> validarRol(rol)
     validarCampos
 ], postUsuarios)
-routes.put('/:id', putUsuarios)
+routes.put('/:id', [
+    check('id', 'El identificador (id) no es una forma de mongo').isMongoId(),
+    check('id').custom(validarExisteID),
+    check('rol').custom(validarRol),
+    validarCampos
+], putUsuarios)
 routes.delete('/', deleteUsuarios)
 routes.patch('/', patchUsuarios)
 
