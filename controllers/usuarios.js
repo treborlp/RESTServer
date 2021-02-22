@@ -2,17 +2,18 @@ const { response } = require('express')
 const bcryptjs = require("bcryptjs")
 const Usuario = require('../models/usuario');
 
-getUsuarios = (req, res = response) => {
+getUsuarios = async(req, res = response) => {
     //Request tipo 
     //http://localhost:8080/api/usuarios?apiKey=6468496456455664645654&id=4521&page=10
-    const { id, apiKey, page } = req.query;
+    //const { id, apiKey, page } = req.query;
 
-    res.json({
-        "mensaje": "ok getUsuarios",
-        id,
-        apiKey,
-        page
-    })
+    const { limite = 5, desde = 0 } = req.query;
+    const usuarios = await Usuario.find()
+        .skip(Number(desde))
+        .limit(Number(limite));
+
+
+    res.json(usuarios)
 }
 
 postUsuarios = async(req, res = response) => {
