@@ -34,7 +34,11 @@ routes.put('/:id', [
     check('rol').custom(validarRol),
     validarCampos
 ], putUsuarios)
-routes.delete('/', deleteUsuarios)
+routes.delete('/:id', [
+    check('id', 'El identificador (id) no es una forma de mongo').isMongoId(),
+    check('id').custom(validarExisteID),
+    validarCampos
+], deleteUsuarios)
 routes.patch('/', patchUsuarios)
 
 module.exports = routes

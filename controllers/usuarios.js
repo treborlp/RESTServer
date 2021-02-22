@@ -64,13 +64,22 @@ putUsuarios = async(req, res = response) => {
     }
     const usuario = await Usuario.findByIdAndUpdate(id, resto);
 
-    res.json(resto)
+    res.json(usuario)
 }
 
-deleteUsuarios = (req, res = response) => {
-    res.json({
-        "mensaje": "ok deleteUsuarios"
-    })
+deleteUsuarios = async(req, res = response) => {
+
+    //Obtenemos el id del usuario
+    const { id } = req.params;
+
+    //Eliminacion Fisica del Usuario
+    //const usuarioEliminado = await Usuario.findByIdAndDelete(id);
+
+    //Eliminacion logica del usuario
+    const usuarioDesactivado = await Usuario.findByIdAndUpdate(id, { estado: false });
+
+    res.json(usuarioDesactivado)
+
 }
 
 patchUsuarios = (req, res = response) => {
