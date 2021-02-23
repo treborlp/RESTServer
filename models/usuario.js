@@ -40,7 +40,8 @@ const UsuarioSchema = Schema({
 
 //Este metodo quita el usuario y la version (__v) de la respuesta
 UsuarioSchema.methods.toJSON = function() {
-    const { __v, password, ...usuario } = this.toObject();
+    const { __v, password, _id, ...usuario } = this.toObject(); //Extraemos las primeras variables y enviamos el resto
+    usuario.uid = _id //Renombramos el _id por uid
     return usuario
 }
 
