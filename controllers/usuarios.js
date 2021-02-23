@@ -83,7 +83,7 @@ deleteUsuarios = async(req, res = response) => {
 
     //
 
-    res.json({ usuarioAuth, usuarioDesactivado })
+    res.json(usuarioDesactivado)
 
 }
 

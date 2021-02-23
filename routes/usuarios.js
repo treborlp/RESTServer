@@ -17,6 +17,7 @@ const {
 
 const { validarCampos } = require('../middleware/validar-campo');
 const validarJWT = require('../middleware/validar-jwt');
+const verificarRol = require('../middleware/verificar-rol');
 
 const routes = Router();
 
@@ -39,6 +40,7 @@ routes.put('/:id', [
 
 routes.delete('/:id', [
     validarJWT,
+    verificarRol,
     check('id', 'El identificador (id) no es una forma de mongo').isMongoId(),
     check('id').custom(validarExisteID),
     validarCampos
