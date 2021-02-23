@@ -14,7 +14,9 @@ const {
     validarCorreo,
     validarExisteID
 } = require('../helpers/db-validator');
+
 const { validarCampos } = require('../middleware/validar-campo');
+const validarJWT = require('../middleware/validar-jwt');
 
 const routes = Router();
 
@@ -34,7 +36,9 @@ routes.put('/:id', [
     check('rol').custom(validarRol),
     validarCampos
 ], putUsuarios)
+
 routes.delete('/:id', [
+    validarJWT,
     check('id', 'El identificador (id) no es una forma de mongo').isMongoId(),
     check('id').custom(validarExisteID),
     validarCampos
