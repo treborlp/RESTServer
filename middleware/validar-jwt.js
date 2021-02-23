@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken')
+const UsuarioSchema = require('../models/usuario');
 
-const validarJWT = (req, res, next) => {
+const validarJWT = async(req, res, next) => {
 
     const token = req.header("x-token");
 
@@ -15,7 +16,24 @@ const validarJWT = (req, res, next) => {
         //Extremos el token
         const { uid } = vericarToken;
 
-        console.log(uid);
+        //Extraemos el usuario del token
+        const usuarioToken = await UsuarioSchema.findById(uid);
+
+        if (!usuarioToken) {
+            return res.status(400).json({
+                msj: "El usuario no existe"
+            })
+        }
+
+        if (!usuarioToken.estado) {
+            return res.status(401).json({
+                msj: "El usuario no esta autorizado"
+            })
+        }
+
+        //Asiganamos a la respuesta el usuario autentificado
+        req.usuarioAutentificado = usuarioToken;
+
 
     } catch (error) {
         console.log(error);

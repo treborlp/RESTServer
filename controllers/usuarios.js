@@ -72,13 +72,18 @@ deleteUsuarios = async(req, res = response) => {
     //Obtenemos el id del usuario
     const { id } = req.params;
 
+    //Obtener Usuario autorizado provienen del request en el middleware de validar-jwt
+    //const usuarioAuth = req.usuarioAutentificado;
+
     //Eliminacion Fisica del Usuario
     //const usuarioEliminado = await Usuario.findByIdAndDelete(id);
 
     //Eliminacion logica del usuario
     const usuarioDesactivado = await Usuario.findByIdAndUpdate(id, { estado: false });
 
-    res.json(usuarioDesactivado)
+    //
+
+    res.json({ usuarioAuth, usuarioDesactivado })
 
 }
 
