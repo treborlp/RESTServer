@@ -1,4 +1,5 @@
 const bcryptjs = require("bcryptjs");
+const generarJWT = require("../helpers/generar-jwt");
 const UsuarioSchema = require('../models/usuario');
 
 const login = async(req, res) => {
@@ -27,10 +28,14 @@ const login = async(req, res) => {
             })
         }
 
+        //Generar JWToken
+        const token = await generarJWT(usuario._id);
+
         res.json({
             msj: "Exito",
             correo,
-            password
+            password,
+            token
         })
 
     } catch (error) {
