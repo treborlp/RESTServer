@@ -33,6 +33,7 @@ class Server {
 
     routes() {
         //Importamos las rutas
+        this.app.use('/api/auth', require("../routes/login"));
         this.app.use('/api/usuarios', require("../routes/usuarios"));
     }
 
