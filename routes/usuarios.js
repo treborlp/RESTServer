@@ -22,6 +22,7 @@ const verificarRol = require('../middleware/verificar-rol');
 const routes = Router();
 
 routes.get('/', getUsuarios)
+
 routes.post('/', [
     check('nombre', 'El nombre no debe estar vacio').not().isEmpty(),
     // check('rol', 'El rol no es valido').isIn(['ADMIN_ROLE', 'USER_ROLE']),
