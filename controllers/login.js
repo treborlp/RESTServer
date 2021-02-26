@@ -52,31 +52,35 @@ const loginGoogle = async(req, res) => {
     try {
         const { nombre, correo, img } = await validarLoginGoogle(id_token);
 
+        //Verificamos si el usuario existe en la base de datos
         const usuarioExiste = await UsuarioSchema.findOne({ correo });
 
-        if (!usuarioExiste) {
+        if (!usuarioExiste) { //Si el usuario no existe se crea con uno con los datos de google
             const data = {
-                nombre,
-                correo,
-                img,
-                google: true,
-                password: "xD"
+                    nombre,
+                    correo,
+                    img,
+                    google: true,
+                    password: "xD"
+                }
+                //Guardamos en la base de datos
+            usuarioExiste = new UsuarioSchema(data);
+            await usuarioExiste.save();
+        } else {
+
+            if (usuarioExiste.estado === false) { //Se verifica si el usuario tiene una cuenta desactivada
+                return res.status(400).json({
+                    msj: "Usuario Bloqueado"
+                })
             }
-            const crearUsuario = new UsuarioSchema(data);
-            await crearUsuario.save();
         }
 
-        if (usuarioExiste.estado === false) {
-            res.status(400).json({
-                msj: "Usuario Bloqueado"
-            })
-        }
-
-
-        //Guardamos en la base de datos
+        //Generar JWToken
+        const token = await generarJWT(usuarioExiste._id); //Se crea un token con el id 
 
         res.status(200).json({
-            msj: "Usuario Creado"
+            msj: "Usuario Autentificado",
+            token
         })
     } catch (error) {
         console.log(error);
