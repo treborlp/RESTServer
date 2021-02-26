@@ -53,7 +53,7 @@ const loginGoogle = async(req, res) => {
         const { nombre, correo, img } = await validarLoginGoogle(id_token);
 
         //Verificamos si el usuario existe en la base de datos
-        const usuarioExiste = await UsuarioSchema.findOne({ correo });
+        let usuarioExiste = await UsuarioSchema.findOne({ correo });
 
         if (!usuarioExiste) { //Si el usuario no existe se crea con uno con los datos de google
             const data = {
