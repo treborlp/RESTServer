@@ -1,5 +1,6 @@
 const bcryptjs = require("bcryptjs");
 const generarJWT = require("../helpers/generar-jwt");
+const validarLoginGoogle = require("../helpers/google-verify");
 const UsuarioSchema = require('../models/usuario');
 
 const login = async(req, res) => {
@@ -45,14 +46,48 @@ const login = async(req, res) => {
 
 }
 
-const loginGoogle = (req, res) => {
+const loginGoogle = async(req, res) => {
     const { id_token } = req.body;
 
-    res.status(200).json({
-        msj: "Token Encontrado",
-        id_token
-    })
+    try {
+        const { nombre, correo, img } = await validarLoginGoogle(id_token);
+
+        const usuarioExiste = await UsuarioSchema.findOne({ correo });
+
+        if (!usuarioExiste) {
+            const data = {
+                nombre,
+                correo,
+                img,
+                google: true,
+                password: "xD"
+            }
+            const crearUsuario = new UsuarioSchema(data);
+            await crearUsuario.save();
+        }
+
+        if (usuarioExiste.estado === false) {
+            res.status(400).json({
+                msj: "Usuario Bloqueado"
+            })
+        }
+
+
+        //Guardamos en la base de datos
+
+        res.status(200).json({
+            msj: "Usuario Creado"
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(400).json({
+            msj: "Error con la validacion de google"
+        })
+
+    }
+
 }
+
 
 
 module.exports = { login, loginGoogle }
