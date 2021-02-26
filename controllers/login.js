@@ -45,4 +45,14 @@ const login = async(req, res) => {
 
 }
 
-module.exports = login
+const loginGoogle = (req, res) => {
+    const { id_token } = req.body;
+
+    res.status(200).json({
+        msj: "Token Encontrado",
+        id_token
+    })
+}
+
+
+module.exports = { login, loginGoogle }
