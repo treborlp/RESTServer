@@ -9,6 +9,12 @@ class Server {
         this.app = express();
         this.port = process.env.PORT
 
+        this.path = {
+            auth: '/api/auth',
+            usuarios: '/api/usuarios',
+            categorias: '/api/categorias'
+        }
+
         this.conectarDB();
         //Middleware
         this.middlewares();
@@ -33,8 +39,9 @@ class Server {
 
     routes() {
         //Importamos las rutas
-        this.app.use('/api/auth', require("../routes/login"));
-        this.app.use('/api/usuarios', require("../routes/usuarios"));
+        this.app.use(this.path.auth, require("../routes/login"));
+        this.app.use(this.path.usuarios, require("../routes/usuarios"));
+        this.app.use(this.path.categorias, require("../routes/categorias"));
     }
 
     listen() {
