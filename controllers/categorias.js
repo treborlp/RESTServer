@@ -21,6 +21,13 @@ const obtenerCategorias = async(req, res = response) => {
     })
 }
 
+//Obtener una categoria
+const obtenerCategoriaUnica = async(req, res = response) => {
+    const { id } = req.params;
+    const categoriaBD = await CategoriaSchema.findById(id).populate('usuario');
+    res.status(200).json(categoriaBD)
+}
+
 
 const crearCategoria = async(req, res = response) => {
     //Obtenemos la categoria del body
@@ -52,5 +59,6 @@ const crearCategoria = async(req, res = response) => {
 
 module.exports = {
     crearCategoria,
-    obtenerCategorias
+    obtenerCategorias,
+    obtenerCategoriaUnica
 }

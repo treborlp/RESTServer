@@ -1,5 +1,6 @@
 const RoleSchema = require('../models/role');
 const UsuarioSchema = require('../models/usuario');
+const CategoriaSchema = require('../models/categoria')
 
 const validarRol = async(rol = '') => {
     const existeRol = await RoleSchema.findOne({ rol });
@@ -26,11 +27,20 @@ const validarExisteID = async(id) => {
     }
 }
 
+const validarExisteCategoria = async(id) => {
+
+    const categoriaExiste = await CategoriaSchema.findById(id); //Consultamos a la base de datos si el correo ya existe
+    if (!categoriaExiste) {
+        throw new Error(`La categoria no existe en la base de datos`)
+    }
+}
+
 
 
 
 module.exports = {
     validarRol,
     validarCorreo,
-    validarExisteID
+    validarExisteID,
+    validarExisteCategoria
 }

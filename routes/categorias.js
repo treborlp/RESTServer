@@ -1,6 +1,7 @@
 const { Router } = require('express');
 const { check } = require('express-validator');
-const { crearCategoria, obtenerCategorias } = require('../controllers/categorias');
+const { crearCategoria, obtenerCategorias, obtenerCategoriaUnica } = require('../controllers/categorias');
+const { validarExisteCategoria } = require('../helpers/db-validator');
 
 const { validarCampos } = require('../middleware/validar-campo');
 const validarJWT = require('../middleware/validar-jwt');
@@ -8,10 +9,11 @@ const routes = Router();
 
 routes.get('/', obtenerCategorias)
 
-routes.get('/:id', (req, res) => {
-
-    return res.status(200).json("get-id");
-})
+routes.get('/:id', [
+    check("id", "el identificador no tiene la estructura de mongo").isMongoId(),
+    check("id", "La categoria no existe").custom(validarExisteCategoria),
+    validarCampos
+], obtenerCategoriaUnica)
 
 routes.post('/', [
     validarJWT,
