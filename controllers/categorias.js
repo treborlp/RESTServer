@@ -30,35 +30,58 @@ const obtenerCategoriaUnica = async(req, res = response) => {
 
 
 const crearCategoria = async(req, res = response) => {
-    //Obtenemos la categoria del body
-    const nombre = req.body.nombre.toUpperCase();
+        //Obtenemos la categoria del body
+        const nombre = req.body.nombre.toUpperCase();
 
-    //Buscamos categorias repetidas
-    const categoriaBD = await CategoriaSchema.findOne({ nombre });
+        //Buscamos categorias repetidas
+        const categoriaBD = await CategoriaSchema.findOne({ nombre });
 
-    if (categoriaBD) {
-        return res.status(401).json({
-            msj: `La categoria: ${categoriaBD.nombre} ya existe`
+        if (categoriaBD) {
+            return res.status(401).json({
+                msj: `La categoria: ${categoriaBD.nombre} ya existe`
+            });
+        }
+
+        const data = {
+            nombre,
+            usuario: req.usuarioAutentificado._id
+        }
+
+        const categoria = new CategoriaSchema(data);
+        await categoria.save(); // Guardamos la categoria
+
+        res.status(200).json({
+            msj: "Categoria creada",
+            categoria
+        })
+
+    }
+    //Actualizar categoria
+const actualizarCategoria = async(req, res = response) => {
+    //Obtengo la categoria
+    const { nombre } = req.body;
+    //Obtenemos el id de los parametros
+    const { id } = req.params;
+
+    try {
+        const actualizado = await CategoriaSchema.findByIdAndUpdate(id, { nombre });
+        res.status(200).json({
+            msj: "categoria actualizada"
         });
+    } catch (error) {
+        return res.status(501).json({
+            msj: "Se encontro un error durante la insercion"
+        })
     }
 
-    const data = {
-        nombre,
-        usuario: req.usuarioAutentificado._id
-    }
-
-    const categoria = new CategoriaSchema(data);
-    await categoria.save(); // Guardamos la categoria
-
-    res.status(200).json({
-        msj: "Categoria creada",
-        categoria
-    })
 
 }
+
+//Borrar Categoria - estado:false
 
 module.exports = {
     crearCategoria,
     obtenerCategorias,
-    obtenerCategoriaUnica
+    obtenerCategoriaUnica,
+    actualizarCategoria
 }
