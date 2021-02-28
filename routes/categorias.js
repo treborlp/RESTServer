@@ -1,14 +1,12 @@
 const { Router } = require('express');
 const { check } = require('express-validator');
-const { crearCategoria } = require('../controllers/categorias');
+const { crearCategoria, obtenerCategorias } = require('../controllers/categorias');
 
 const { validarCampos } = require('../middleware/validar-campo');
 const validarJWT = require('../middleware/validar-jwt');
 const routes = Router();
 
-routes.get('/', (req, res) => {
-    return res.status(200).json("get");
-})
+routes.get('/', obtenerCategorias)
 
 routes.get('/:id', (req, res) => {
 

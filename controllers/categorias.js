@@ -10,13 +10,13 @@ const obtenerCategorias = async(req, res = response) => {
 
     //Realizamos la peticion a la base de datos
     const [categorias, total] = await Promise.all([
-        CategoriaSchema.find().skip(Number(desde)).limit(Number(limite)),
+        CategoriaSchema.find().skip(Number(desde)).limit(Number(limite)).populate("usuario"),
         CategoriaSchema.countDocuments() //Obtiene el número total de registros
     ]);
 
     //Respuesta 
     res.status(200).json({
-        categoria,
+        categorias,
         total
     })
 }
