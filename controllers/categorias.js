@@ -78,10 +78,28 @@ const actualizarCategoria = async(req, res = response) => {
 }
 
 //Borrar Categoria - estado:false
+const eliminarCategoria = async(req, res) => {
+    //Obtenemos el id de la request
+    const { id } = req.params;
+    try {
+        await CategoriaSchema.findOneAndUpdate(id, { estado: false })
+        res.status(200).json({
+            msj: "categoria actualizada"
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(501).json({
+            msj: "No se pudo eliminar"
+        })
+    }
+
+}
+
 
 module.exports = {
     crearCategoria,
     obtenerCategorias,
     obtenerCategoriaUnica,
-    actualizarCategoria
+    actualizarCategoria,
+    eliminarCategoria
 }
