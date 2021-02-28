@@ -32,6 +32,7 @@ routes.post('/', [
     check('rol').custom(validarRol), // Se obvia la forma (rol)=> validarRol(rol)
     validarCampos
 ], postUsuarios)
+
 routes.put('/:id', [
     check('id', 'El identificador (id) no es una forma de mongo').isMongoId(),
     check('id').custom(validarExisteID),
@@ -46,6 +47,7 @@ routes.delete('/:id', [
     check('id').custom(validarExisteID),
     validarCampos
 ], deleteUsuarios)
+
 routes.patch('/', patchUsuarios)
 
 module.exports = routes

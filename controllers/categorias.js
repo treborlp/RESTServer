@@ -1,6 +1,27 @@
 const { response } = require("express");
 const CategoriaSchema = require("../models/categoria")
 
+
+// obtenerCategorias - Paginado - Total - populate
+
+const obtenerCategorias = async(req, res = response) => {
+    //obtetemos el limite e inicio de la paginacion
+    const { limite = 5, desde = 0 } = req.query;
+
+    //Realizamos la peticion a la base de datos
+    const [categorias, total] = await Promise.all([
+        CategoriaSchema.find().skip(Number(desde)).limit(Number(limite)),
+        CategoriaSchema.countDocuments() //Obtiene el número total de registros
+    ]);
+
+    //Respuesta 
+    res.status(200).json({
+        categoria,
+        total
+    })
+}
+
+
 const crearCategoria = async(req, res = response) => {
     //Obtenemos la categoria del body
     const nombre = req.body.nombre.toUpperCase();
@@ -30,5 +51,6 @@ const crearCategoria = async(req, res = response) => {
 }
 
 module.exports = {
-    crearCategoria
+    crearCategoria,
+    obtenerCategorias
 }

@@ -7,7 +7,7 @@ getUsuarios = async(req, res = response) => {
     //http://localhost:8080/api/usuarios?apiKey=6468496456455664645654&id=4521&page=10
     //const { id, apiKey, page } = req.query;
     const query = { estado: true }; // Query para listar solo los usuarios habilitados
-    const { limite = 5, desde = 0 } = req.query;
+    const { limite = 5, desde = 0 } = req.query; //req.query viene de los request params
 
     /*  //Consulta en la base
       const usuarios = await Usuario.find(query)
@@ -21,7 +21,7 @@ getUsuarios = async(req, res = response) => {
     const [usuarios, total] = await Promise.all([
         Usuario.find(query)
         .skip(Number(desde))
-        .limit(Number(limite)), //Promera promesa 
+        .limit(Number(limite)), //Primera promesa 
         Usuario.countDocuments(query) //Segunda promesa
     ])
 
