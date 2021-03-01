@@ -31,9 +31,10 @@ routes.post('/', [
 
 //Cualquiera con token valido 
 routes.put('/:id', [
+        validarJWT,
+        check("id", "No se encuentra id").not().isEmpty(),
         check("id", "el identificador no tiene la estructura de mongo").isMongoId(),
         check("id", "La categoria no existe").custom(validarExisteCategoria),
-        validarJWT,
         validarCampos
     ],
     actualizarCategoria)

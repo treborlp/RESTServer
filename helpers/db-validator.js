@@ -1,6 +1,7 @@
 const RoleSchema = require('../models/role');
 const UsuarioSchema = require('../models/usuario');
 const CategoriaSchema = require('../models/categoria')
+const ProductoSchema = require('../models/producto')
 
 const validarRol = async(rol = '') => {
     const existeRol = await RoleSchema.findOne({ rol });
@@ -35,6 +36,21 @@ const validarExisteCategoria = async(id) => {
     }
 }
 
+const validarExisteProducto = async(id = "") => {
+
+    const productoExiste = await ProductoSchema.findById(id); //Consultamos a la base de datos si el correo ya existe
+    if (!productoExiste || !productoExiste.estado) {
+        throw new Error(`El producto no existe en la base de datos`)
+    }
+
+}
+
+const validarSiAgotado = async(id = "") => {
+    const productoExiste = await ProductoSchema.findById(id); //Consultamos a la base de datos si el correo ya existe
+    if (!productoExiste.disponible)
+        throw new Error(`El producto se encuentra agotado`)
+}
+
 
 
 
@@ -42,5 +58,7 @@ module.exports = {
     validarRol,
     validarCorreo,
     validarExisteID,
-    validarExisteCategoria
+    validarExisteCategoria,
+    validarExisteProducto,
+    validarSiAgotado
 }
