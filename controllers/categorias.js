@@ -7,11 +7,13 @@ const CategoriaSchema = require("../models/categoria")
 const obtenerCategorias = async(req, res = response) => {
     //obtetemos el limite e inicio de la paginacion
     const { limite = 5, desde = 0 } = req.query;
+    //Solo obtenemos categorias con el estado true
+    const query = { estado: true };
 
     //Realizamos la peticion a la base de datos
     const [categorias, total] = await Promise.all([
-        CategoriaSchema.find().skip(Number(desde)).limit(Number(limite)).populate("usuario"),
-        CategoriaSchema.countDocuments() //Obtiene el número total de registros
+        CategoriaSchema.find(query).skip(Number(desde)).limit(Number(limite)).populate("usuario", "nombre"),
+        CategoriaSchema.countDocuments(query) //Obtiene el número total de registros
     ]);
 
     //Respuesta 
@@ -59,7 +61,8 @@ const crearCategoria = async(req, res = response) => {
     //Actualizar categoria
 const actualizarCategoria = async(req, res = response) => {
     //Obtengo la categoria
-    const { nombre } = req.body;
+    let { nombre } = req.body;
+    nombre = nombre.toUpperCase();
     //Obtenemos el id de los parametros
     const { id } = req.params;
 

@@ -30,7 +30,7 @@ const validarExisteID = async(id) => {
 const validarExisteCategoria = async(id) => {
 
     const categoriaExiste = await CategoriaSchema.findById(id); //Consultamos a la base de datos si el correo ya existe
-    if (!categoriaExiste) {
+    if (!categoriaExiste || !categoriaExiste.estado) {
         throw new Error(`La categoria no existe en la base de datos`)
     }
 }
