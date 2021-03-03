@@ -12,12 +12,24 @@ const colecionesPermitidas = [
 const buscarUsuarios = async(termino, res = response) => {
     const esMongoID = ObjectId.isValid(termino); //Identifica si es un id de mongo
 
+    const regex = new RegExp(termino, "i");
+
     if (esMongoID) {
         const usuario = await UsuarioSchema.findById(termino);
         res.json({
-            respuesta: (usuario) ? usuario : []
+            respuesta: (usuario) ? [usuario] : []
         })
     }
+
+    const usuario = await UsuarioSchema.find({
+        $or: [{ nombre: regex }, { correo: regex }],
+        $and: [{ estado: true }]
+    });
+    res.json({
+        respuesta: usuario
+    })
+
+
 }
 
 const buscarController = async(req, res) => {
