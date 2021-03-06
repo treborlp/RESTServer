@@ -1,4 +1,6 @@
 const { response } = require("express");
+const { v4: uuidv4 } = require('uuid');
+
 const path = require('path');
 
 
@@ -20,7 +22,9 @@ const uploads = (req, res = response) => {
         return;
     }
 
-    uploadPath = path.join(__dirname, '../uploads/', archivo.name);
+    const nombreTemp = uuidv4() + '.' + extensionArchivo; // ⇨ '1b9d6bcd-bbfd-4b2d-9b5d-ab8dfbbd4bed'
+
+    uploadPath = path.join(__dirname, '../uploads/', nombreTemp);
 
     archivo.mv(uploadPath, (err) => {
         if (err) {
