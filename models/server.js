@@ -41,7 +41,8 @@ class Server {
         //File uploads
         this.app.use(fileUpload({
             useTempFiles: true,
-            tempFileDir: '/tmp/'
+            tempFileDir: '/tmp/',
+            createParentPath: true //crea la subcarpeta por defecto
         }));
     }
 
