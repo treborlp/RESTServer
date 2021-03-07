@@ -5,9 +5,9 @@ const uploads = async(req, res = response) => {
 
 
     if (!req.files || Object.keys(req.files).length === 0 || !req.files.archivo) {
-        res.status(400).json({ msj: 'No existe ningun archivo' });
-        return;
+        return res.status(400).json({ msj: 'No existe ningun archivo' });
     }
+
     try {
         const nombre = await subirArchivo(req.files, ['txt', 'md', 'csv'], 'textos');
         res.json({ nombre })
@@ -15,11 +15,17 @@ const uploads = async(req, res = response) => {
         res.status(400).json({
             error
         })
-
     }
     //Se llama el helper de la funcion subir archivos
-
-
 }
 
-module.exports = uploads
+const actualizarImagenCategoria = async(req, res) => {
+    const { coleccion, id } = req.params;
+
+    res.json({
+        coleccion,
+        id
+    })
+
+}
+module.exports = { uploads, actualizarImagenCategoria }

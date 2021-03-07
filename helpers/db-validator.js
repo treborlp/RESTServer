@@ -51,6 +51,14 @@ const validarSiAgotado = async(id = "") => {
         throw new Error(`El producto se encuentra agotado`)
 }
 
+const colecionesPermitidas = (coleccion = '', colecciones = []) => {
+    if (!colecciones.includes(coleccion)) {
+        throw new Error('La coleccion no es permitida')
+    }
+
+    return true
+}
+
 
 
 
@@ -60,5 +68,6 @@ module.exports = {
     validarExisteID,
     validarExisteCategoria,
     validarExisteProducto,
-    validarSiAgotado
+    validarSiAgotado,
+    colecionesPermitidas
 }
