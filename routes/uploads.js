@@ -9,7 +9,7 @@ const routes = Router();
 routes.post('/', uploads);
 routes.put('/:coleccion/:id', [
     check('id', 'no es un id mongo').isMongoId(),
-    check('coleccion', 'no permitida').custom(c => colecionesPermitidas(c, ['usuarios', 'categorias'])),
+    check('coleccion', 'no permitida').custom(c => colecionesPermitidas(c, ['usuarios', 'productos'])),
     validarCampos
 ], actualizarImagenCategoria)
 
