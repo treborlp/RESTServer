@@ -108,10 +108,10 @@ const obtenerImagen = async(req, res) => {
             res.sendFile(pathImagen) //Enviamos la imagen
         }
     } else {
-        res.json({
-            msj: 'El usuario no tiene imagen'
-        })
+        const pathNotFound = path.join(__dirname, '../assets', 'not_found.png')
+        res.sendFile(pathNotFound)
     }
+
 
 
 }
