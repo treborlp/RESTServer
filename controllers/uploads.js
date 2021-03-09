@@ -71,4 +71,48 @@ const actualizarImagenCategoria = async(req, res) => {
     res.json(modelo)
 
 }
-module.exports = { uploads, actualizarImagenCategoria }
+
+const obtenerImagen = async(req, res) => {
+    const { id, coleccion } = req.params;
+
+    let modelo;
+
+    switch (coleccion) {
+        case 'usuarios':
+            modelo = await usuario.findById(id);
+            if (!modelo) {
+                return res.status(401).json({
+                    msj: 'El modelo no existe'
+                })
+            }
+            break;
+
+        case 'productos':
+            modelo = await producto.findById(id);
+            if (!modelo) {
+                return res.status(401).json({
+                    msj: 'El producto no existe'
+                })
+            }
+            break;
+        default:
+            return res.status(501).json({
+                msj: 'Error interno en el servidor'
+            })
+    }
+
+    //Borrar imagen anterios si existe
+    if (modelo.img) {
+        const pathImagen = path.join(__dirname, '../uploads', coleccion, modelo.img); //Direccion de la imagen fisica
+        if (fs.existsSync(pathImagen)) { //Verificamos si existe la imagen
+            res.sendFile(pathImagen) //Enviamos la imagen
+        }
+    } else {
+        res.json({
+            msj: 'El usuario no tiene imagen'
+        })
+    }
+
+
+}
+module.exports = { uploads, actualizarImagenCategoria, obtenerImagen }
