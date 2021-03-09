@@ -7,9 +7,10 @@ const usuario = require("../models/usuario");
 const uploads = async(req, res = response) => {
 
 
-    if (!req.files || Object.keys(req.files).length === 0 || !req.files.archivo) {
-        return res.status(400).json({ msj: 'No existe ningun archivo' });
-    }
+    // Esta validación de archivo se realiza a traves del midelware validarExisteArchivoImagen
+    // if (!req.files || Object.keys(req.files).length === 0 || !req.files.archivo) {
+    //     return res.status(400).json({ msj: 'No existe ningun archivo' });
+    // }
 
     try {
         const nombre = await subirArchivo(req.files, ['txt', 'md', 'csv'], 'textos');
