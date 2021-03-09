@@ -1,3 +1,6 @@
+const path = require('path');
+const fs = require('fs');
+
 const { response } = require("express");
 const { subirArchivo } = require("../helpers");
 const categoria = require("../models/categoria");
@@ -50,6 +53,14 @@ const actualizarImagenCategoria = async(req, res) => {
             return res.status(501).json({
                 msj: 'Error interno en el servidor'
             })
+    }
+
+    //Borrar imagen anterios si existe
+    if (modelo.img) {
+        const pathImagen = path.join(__dirname, '../uploads', coleccion, modelo.img); //Direccion de la imagen fisica
+        if (fs.existsSync(pathImagen)) { //Verificamos si existe la imagen
+            fs.unlinkSync(pathImagen); //Eliminamos la imagen antigua
+        }
     }
 
     //Asignamos el nombre de la iamgen al modelo
