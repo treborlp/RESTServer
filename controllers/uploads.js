@@ -1,6 +1,9 @@
 const path = require('path');
 const fs = require('fs');
 
+const cloudinary = require('cloudinary').v2
+cloudinary.config(process.env.CLOUDINARY_URL); //Configuracion de cloudynary
+
 const { response } = require("express");
 const { subirArchivo } = require("../helpers");
 const categoria = require("../models/categoria");
@@ -72,6 +75,55 @@ const actualizarImagenCategoria = async(req, res) => {
 
 }
 
+const actualizarImagenCloudinary = async(req, res) => {
+    const { coleccion, id } = req.params;
+
+    let modelo;
+
+    switch (coleccion) {
+        case 'usuarios':
+            modelo = await usuario.findById(id);
+            if (!modelo) {
+                return res.status(401).json({
+                    msj: 'El modelo no existe'
+                })
+            }
+            break;
+
+        case 'productos':
+            modelo = await producto.findById(id);
+            if (!modelo) {
+                return res.status(401).json({
+                    msj: 'El producto no existe'
+                })
+            }
+            break;
+        default:
+            return res.status(501).json({
+                msj: 'Error interno en el servidor'
+            })
+    }
+
+    //Borrar imagen anterios si existe
+    if (modelo.img) {
+        const nombreArr = modelo.img.split('/'); //Separamos la url de la direccion web
+        const nombreImagen = nombreArr[nombreArr.length - 1] //El ultimo elemento de la ulr: "imagen.png"
+        const [public_id] = nombreImagen.split('.'); // obtenemos el primer elemento del arreglo "imagen"
+
+        cloudinary.uploader.destroy(public_id); //Destruimos la imagen en cloudinary
+    }
+
+    //Subir archivo a cloudinary
+    const { tempFilePath } = req.files.archivo;
+    const { secure_url } = await cloudinary.uploader.upload(tempFilePath)
+    modelo.img = secure_url
+
+    await modelo.save();
+
+    res.json(modelo)
+
+}
+
 const obtenerImagen = async(req, res) => {
     const { id, coleccion } = req.params;
 
@@ -115,4 +167,9 @@ const obtenerImagen = async(req, res) => {
 
 
 }
-module.exports = { uploads, actualizarImagenCategoria, obtenerImagen }
+module.exports = {
+    uploads,
+    actualizarImagenCategoria,
+    obtenerImagen,
+    actualizarImagenCloudinary
+}
